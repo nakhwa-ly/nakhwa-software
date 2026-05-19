@@ -3,12 +3,16 @@ import { motion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import { Counter } from '@/components/shared/Counter';
 
-const STATS = [
-  { value: 25, suffix: '+', key: 'projects' },
-  { value: 15, suffix: '+', key: 'clients' },
-  { value: 5, suffix: '+', key: 'years' },
-  { value: 1000, suffix: '+', key: 'coffee' },
-] as const;
+type StatItem =
+  | { key: string; value: number; suffix: string; animated: true }
+  | { key: string; value: null; display: string; animated: false };
+
+const STATS: StatItem[] = [
+  { key: 'projects', value: 5,    suffix: '+', animated: true  },
+  { key: 'clients',  value: 10,   suffix: '+', animated: true  },
+  { key: 'years',    value: 2,    suffix: '+', animated: true  },
+  { key: 'coffee',   value: null, display: '∞', animated: false },
+];
 
 const gridContainer = {
   hidden: { opacity: 0 },
@@ -33,16 +37,20 @@ export function Stats() {
           viewport={{ once: true }}
           className="grid grid-cols-2 lg:grid-cols-4 gap-8"
         >
-          {STATS.map(({ value, suffix, key }) => (
+          {STATS.map((stat) => (
             <motion.div
-              key={key}
+              key={stat.key}
               variants={gridItem}
               className="text-center space-y-2"
             >
               <div className="text-4xl md:text-5xl font-bold text-primary">
-                <Counter to={value} suffix={suffix} duration={2} />
+                {stat.animated ? (
+                  <Counter to={stat.value} suffix={stat.suffix} duration={2} />
+                ) : (
+                  <span className="tabular-nums">{stat.display}</span>
+                )}
               </div>
-              <p className="text-muted-foreground font-medium">{t(key)}</p>
+              <p className="text-muted-foreground font-medium">{t(stat.key as Parameters<typeof t>[0])}</p>
             </motion.div>
           ))}
         </motion.div>

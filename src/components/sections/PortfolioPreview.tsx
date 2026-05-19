@@ -6,6 +6,7 @@ import { Link } from '@/i18n/routing';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ProjectCard } from '@/components/shared/ProjectCard';
+import { ProjectMockup, type ProjectMockupVariant } from '@/components/shared/ProjectMockup';
 
 const gridContainer = {
   hidden: { opacity: 0 },
@@ -17,11 +18,11 @@ const gridItem = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
-const PROJECTS = [
-  { key: 'lamia', emoji: '🍕' },
-  { key: 'inventory', emoji: '📦' },
-  { key: 'education', emoji: '🎓' },
-] as const;
+const PROJECTS: { key: 'lamia' | 'inventory' | 'education'; variant: ProjectMockupVariant; accentFrom: string; accentTo: string }[] = [
+  { key: 'lamia',     variant: 'mobile',    accentFrom: 'from-primary', accentTo: 'to-accent'   },
+  { key: 'inventory', variant: 'dashboard', accentFrom: 'from-primary', accentTo: 'to-muted'    },
+  { key: 'education', variant: 'video',     accentFrom: 'from-accent',  accentTo: 'to-primary'  },
+];
 
 export function PortfolioPreview() {
   const t = useTranslations('portfolio');
@@ -50,20 +51,22 @@ export function PortfolioPreview() {
           viewport={{ once: true }}
           className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12"
         >
-          {PROJECTS.map(({ key, emoji }) => (
+          {PROJECTS.map(({ key, variant, accentFrom, accentTo }) => (
             <motion.div key={key} variants={gridItem}>
               <ProjectCard
                 title={t(`projects.${key}.title`)}
                 description={t(`projects.${key}.description`)}
                 tags={t.raw(`projects.${key}.tags`) as string[]}
                 viewProject={t('viewProject')}
-                imagePlaceholder={emoji}
+                mockupSlot={
+                  <ProjectMockup variant={variant} accentFrom={accentFrom} accentTo={accentTo} />
+                }
               />
             </motion.div>
           ))}
         </motion.div>
 
-        {/* View All Button */}
+        {/* View All */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

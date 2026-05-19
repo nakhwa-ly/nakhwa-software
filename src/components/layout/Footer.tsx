@@ -12,10 +12,13 @@ const QUICK_LINKS = [
 
 const SERVICE_KEYS = ['mobile', 'web', 'businessSystems', 'database', 'delivery', 'consulting'] as const;
 
+// TODO: enable when accounts ready
+// const SOCIAL_LINKS_PENDING = [
+//   { label: 'X',        href: 'https://x.com/nakhwa-ly'                       },
+//   { label: 'LinkedIn', href: 'https://linkedin.com/company/nakhwa-ly'         },
+// ];
 const SOCIAL_LINKS = [
-  { label: 'X', href: '#' },
-  { label: 'LinkedIn', href: '#' },
-  { label: 'GitHub', href: '#' },
+  { label: 'GitHub', href: 'https://github.com/nakhwa-ly' },
 ];
 
 export function Footer() {

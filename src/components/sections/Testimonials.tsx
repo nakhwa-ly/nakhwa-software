@@ -16,6 +16,7 @@ const gridItem = {
 
 export function Testimonials() {
   const t = useTranslations('testimonials');
+  // TODO(pre-launch): replace with real client quotes + signed approval
   const items = t.raw('items') as Array<{
     quote: string;
     name: string;

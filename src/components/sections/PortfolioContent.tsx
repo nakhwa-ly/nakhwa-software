@@ -5,13 +5,20 @@ import { useTranslations } from 'next-intl';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ProjectCard } from '@/components/shared/ProjectCard';
+import { ProjectMockup, type ProjectMockupVariant } from '@/components/shared/ProjectMockup';
 import { CTABanner } from '@/components/shared/CTABanner';
 
-const PROJECTS = [
-  { key: 'lamia', emoji: '🍕', category: 'mobile' },
-  { key: 'inventory', emoji: '📊', category: 'systems' },
-  { key: 'education', emoji: '📚', category: 'mobile' },
-] as const;
+const PROJECTS: {
+  key: 'lamia' | 'inventory' | 'education';
+  variant: ProjectMockupVariant;
+  accentFrom: string;
+  accentTo: string;
+  category: 'mobile' | 'web' | 'systems';
+}[] = [
+  { key: 'lamia',     variant: 'mobile',    accentFrom: 'from-primary', accentTo: 'to-accent',  category: 'mobile'  },
+  { key: 'inventory', variant: 'dashboard', accentFrom: 'from-primary', accentTo: 'to-muted',   category: 'systems' },
+  { key: 'education', variant: 'video',     accentFrom: 'from-accent',  accentTo: 'to-primary', category: 'mobile'  },
+];
 
 type FilterKey = 'all' | 'mobile' | 'web' | 'systems';
 
@@ -21,9 +28,9 @@ export function PortfolioContent() {
   const [filter, setFilter] = useState<FilterKey>('all');
 
   const filters: { key: FilterKey; label: string }[] = [
-    { key: 'all', label: t('filters.all') },
-    { key: 'mobile', label: t('filters.mobile') },
-    { key: 'web', label: t('filters.web') },
+    { key: 'all',     label: t('filters.all')     },
+    { key: 'mobile',  label: t('filters.mobile')  },
+    { key: 'web',     label: t('filters.web')     },
     { key: 'systems', label: t('filters.systems') },
   ];
 
@@ -77,7 +84,7 @@ export function PortfolioContent() {
               transition={{ duration: 0.3 }}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             >
-              {filtered.map(({ key, emoji }) => {
+              {filtered.map(({ key, variant, accentFrom, accentTo }) => {
                 const tags = t.raw(`projects.${key}.tags`) as string[];
                 return (
                   <ProjectCard
@@ -85,8 +92,10 @@ export function PortfolioContent() {
                     title={t(`projects.${key}.title`)}
                     description={t(`projects.${key}.description`)}
                     tags={tags}
-                    imagePlaceholder={emoji}
                     viewProject={t('viewProject')}
+                    mockupSlot={
+                      <ProjectMockup variant={variant} accentFrom={accentFrom} accentTo={accentTo} />
+                    }
                   />
                 );
               })}
